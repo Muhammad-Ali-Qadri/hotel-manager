@@ -1,0 +1,139 @@
+{% extends 'web/base_template.html' %}
+{% load staticfiles %}
+{% load cloudinary %}
+{% block content %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+    <div class="my-5 ml-5">
+        <form method="post" action="{% url 'check' %}">
+            {% csrf_token %}
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="inputcheckin">Check in Date</label>
+                    {% if check_in is not None %}
+                        <input type="date" class="form-control" id="inputcheckin" placeholder="{{ check_in }}"
+                               value="{{ check_in }}"
+                               name="check_in"
+                               required>
+                    {% else %}
+                        <input type="date" class="form-control" id="inputcheckin" placeholder="2018-05-1"
+                               value="2018-05-1"
+                               name="check_in"
+                               required>
+                    {% endif %}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="inputcheckout">Check out Date</label>
+                    {% if check_out is not None %}
+                        <input type="date" class="form-control" id="inputcheckout" placeholder="{{ check_out }}"
+                               value="{{ check_out }}"
+                               name="check_out" required>
+                    {% else %}
+                        <input type="date" class="form-control" id="inputcheckout" placeholder="2018-05-1"
+                               value="2018-05-1"
+                               name="check_out"
+                               required>
+                    {% endif %}
+                </div>
+                <div class="form-group col-md-5 my-4">
+                    <button type="submit" class="btn btn-primary">CHECK</button>
+                </div>
+
+            </div>
+        </form>
+
+    </div>
+    {% if available is not None %}
+
+        <div class="my-3 ml-1">
+            <div class="row">
+
+                {% for zipped in available %}
+                    <form method="post" action="{% url 'booking' %}">
+                        {% csrf_token %}
+
+                    <div class="col-sm-auto">
+                        <div class="card" style="width: 18rem;">
+                            <input type="text" id="check_in" name="check_in" hidden value="{{ check_in }}">
+                            <input type="text" id="check_out" name="check_out" hidden value="{{ check_out }}">
+                            <input type="text" id="type_id" name="type_id" hidden value="{{ zipped.0.id }}">
+                            <label id="max_quantity" hidden>{{ zipped.1 }}</label>
+                            <label id="type_price" hidden>{{ zipped.0.price }}</label>
+                            {% cloudinary zipped.2.image.public_id crop="fill" width="240" height="164" %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ zipped.0.name }}</h5>
+                                <p class="card-text">{{ zipped.0.description }}</p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item">
+                                    <div class="items">
+                                        <ul>
+                                        {% if zipped.0.has_air_conditioning %}
+                                            <li><a href="#"><span class="img1"> </span></a></li>
+                                        {% endif %}
+                                            {% if zipped.0.has_dryer %}
+                                                <li><a href="#"><span class="img2"> </span></a></li>
+                                            {% endif %}
+                                            {% if zipped.0.has_room_service %}
+                                                <li><a href="#"><span class="img3"> </span></a></li>
+                                            {% endif %}
+                                            {% if zipped.0.has_electronic_safe %}
+                                                <li><a href="#"><span class="img4"> </span></a></li>
+                                            {% endif %}
+                                            {% if zipped.0.has_wifi %}
+                                                <li><a href="#"><span class="img5"> </span></a></li>
+                                            {% endif %}
+                                            {% if zipped.0.has_breakfast %}
+                                                <li><a href="#"><span class="img6"> </span></a></li>
+                                            {% endif %}
+                                        </ul>
+                                    </div>
+                                </li>
+                        <li class="list-group-item"> Rs.{{ zipped.0.price }} per night</li>
+                        <li class="list-group-item"> Max {{ zipped.0.capacity }} persons</li>
+                        <li class="list-group-item">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="">Qty</span>
+                                </div>
+                                <input type="number" min="1" max="{{ zipped.1 }}" class="form-control" name="quantity"
+                                       value="1" required>
+                            </div>
+                        </li>
+                        </ul>
+
+                    </div>
+                        <div class="card-body">
+                            <button type="submit" class="btn btn-primary">BOOK</button>
+                        </div>
+                    </div>
+                    </form>
+                {% endfor %}
+        </div>
+
+        </div>
+
+
+    {% endif %}
+
+    <script>
+        var t = new Date();
+        t.setDate(t.getDate() + 1);
+        var today = new Date(t).toISOString().split('T')[0];
+        document.getElementById("inputcheckin").setAttribute('min', today);
+        document.getElementById("inputcheckout").setAttribute('min', today);
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+{% endblock %}

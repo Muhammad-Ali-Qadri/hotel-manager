@@ -1,0 +1,71 @@
+{% extends 'web/base_template2.html' %}
+{% load staticfiles %}
+
+{% block content %}
+    <script>
+        document.getElementById("signup_t").setAttribute("class", "active");
+    </script>
+    <!-- Top content -->
+    <div class="top-content">
+
+        <div class="inner-bg">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-6 col-sm-offset-3 form-box">
+                        <div class="form-top">
+                            <div class="form-top-left">
+                                <h3>Registration Form</h3>
+                                <h4 colored="red">{{ request.error }}</h4>
+                            </div>
+                            <div class="form-top-right">
+                                <i class="fa fa-key"></i>
+                            </div>
+                        </div>
+                        <div class="form-bottom">
+                            <form role="form" action="{% url 'signup' %}" method="post" class="login-form"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label class="sr-only" for="name">Full Name</label>
+                                    <input type="text" name="name" placeholder="Name..."
+                                           class="form-username form-control" id="name" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="email">Email</label>
+                                    <input type="email" name="email" placeholder="Email..."
+                                           class="form-username form-control" id="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="username">Username</label>
+                                    <input type="text" name="username" placeholder="Username..."
+                                           class="form-password form-control" id="username" minlength="3" required>
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="password">Profile Picture</label>
+                                    <input type="file" name="profile_pic"
+                                           class="form-password form-control" id="profile_pic" accept="image/*">
+                                </div>
+                                <div class="form-group">
+                                    <label class="sr-only" for="password">Enter Password</label>
+                                    <input type="password" name="password" placeholder="Password..."
+                                           class="form-password form-control" id="password" minlength="5" required>
+                                </div>
+                                <input type="submit" class="btn" value="Sign Up!"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Javascript -->
+    <script src="{% static 'assets/js/jquery-1.11.1.min.js' %}"></script>
+    <script src="{% static 'assets/bootstrap/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'assets/js/jquery.backstretch.min.js' %}"></script>
+    <script src="{% static 'assets/js/scripts.js' %}"></script>
+
+
+{% endblock %}

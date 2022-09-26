@@ -1,0 +1,117 @@
+{% extends 'web/base_template.html' %}
+{% load staticfiles %}
+{% load cloudinary %}
+{% block content %}
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <div class="my-3 ml-3">
+    <div class="media ml-5 my-5">
+        {% cloudinary request.user.profile.profile_pic.public_id crop="fill" width="96" height="96" class="rounded mx-auto d-block" %}
+        <div class="media-body ml-3">
+            <h5 class="mt-0">{{ request.user.first_name }} &nbsp {{ request.user.last_name }}</h5>
+        </div>
+    </div>
+
+    <nav>
+        <div class="nav nav-tabs ml-5 my-2" id="nav-tab" role="tablist" style="width: 50%;">
+            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+               aria-controls="nav-home" aria-selected="true">Profile</a>
+            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+               aria-controls="nav-profile" aria-selected="false">Reviews</a>
+        </div>
+    </nav>
+    <div class="tab-content ml-5" id="nav-tabContent" style="width: 50%; height: 750px">
+        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+            <form action="{% url 'profile' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="custom-file my-3">
+                    <script>
+                        function readURL(input) {
+                            if (input.files && input.files[0]) {
+                                var reader = new FileReader();
+
+                                reader.onload = function (e) {
+                                    $('#new_image')
+                                        .attr('src', e.target.result)
+                                        .width(96)
+                                        .height(96);
+                                };
+                                reader.readAsDataURL(input.files[0]);
+                            }
+                        }
+                    </script>
+                    <input type="file" class="custom-file-input" id="customFile"
+                           accept="image/*" onchange="readURL(this)" name="newProfilePic">
+                    <label class="custom-file-label" for="customFile">Choose file</label>
+                </div>
+
+                <div class="form-group col" id="new_pic">
+                    <img src="" alt="" id="new_image">
+                </div>
+                <div class="row my-3">
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="First name"
+                               value="{{ request.user.first_name }}" name="first_name" required>
+                    </div>
+                    <div class="col">
+                        <input type="text" class="form-control" placeholder="Last name"
+                               value="{{ request.user.last_name }}" name="last_name" required>
+                    </div>
+                </div>
+                <div class="form-row my-3">
+                    <div class="form-group col">
+                        <label for="inputEmail4">Email</label>
+                        <input type="email" class="form-control" id="inputEmail4"
+                               placeholder="{{ request.user.email }}"
+                               value="{{ request.user.email }}" name="email" required>
+                    </div>
+                </div>
+                <div class="row my-3">
+                    <div class="col">
+                        <input type="password" class="form-control" placeholder="Password"
+                               value="" name="password" id="password" minlength="5">
+                        <small id="passwordHelpInline" class="text-muted">
+                            ONLY ENTER IF YOU WANT TO CHANGE THE PASSWORD. Must be 5-20 characters long.
+                        </small>
+                    </div>
+                    <div class="col">
+                        <input type="password" class="form-control" placeholder="Confirm Password"
+                               value="" name="confirm_password" id="confirm_password" minlength="5">
+                    </div>
+                </div>
+                <div class="form-group my-3">
+                    <label for="inputAddress">Address</label>
+                    <input type="text" class="form-control" id="inputAddress" placeholder="1234 Main St" value=""
+                           name="address">
+                </div>
+                <button type="submit" class="btn btn-primary">SAVE</button>
+            </form>
+        </div>
+        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab"
+             style="overflow: scroll">
+            {% for review in reviews %}
+                <div class="card my-1" style="width: 100%;">
+                <div class="card-body">
+                    <h5 class="card-title">{{ review.review_date }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Rating: {{ review.rating }}
+                    </h6>
+                    <p class="card-text">{{ review.review }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+            integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+            crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+            integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+            crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+            integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+            crossorigin="anonymous"></script>
+
+{% endblock %}

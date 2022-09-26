@@ -1,0 +1,131 @@
+{% extends 'web/base_template.html' %}
+{% load staticfiles %}
+{% load cloudinary %}
+{% block content %}
+
+    <script>
+        document.getElementById("index_t").setAttribute("class", "active");
+    </script>
+
+    <div class="banner">
+        <div class="banner-info text-center">
+            <h3><label>Hello,</label> You've Reached</h3>
+            <h1>HOTEL FORTUNE</h1>
+            <span></span>
+            <ul>
+                <li><a class="scroll" href="#">HOTEL</a><i class="line"></i></li>
+                <li><a class="scroll" href="#">SPA SALOON</a><i class="line2"></i></li>
+                <li><a class="scroll" href="#">FINE DINING</a></li>
+                <div class="clearfix"></div>
+            </ul>
+        </div>
+    </div>
+    <!---strat-date-piker---->
+    <link rel="stylesheet" href="{% static 'css/jquery-ui.css' %}"/>
+    <script src="{% static 'js/jquery-ui.js' %}"></script>
+    <script>
+        $(function () {
+            $("#datepicker,#datepicker1").datepicker();
+        });
+    </script>
+    <!---/End-date-piker---->
+    <link type="text/css" rel="stylesheet" href="{% static 'css/JFFormStyle-1.css' %}"/>
+    <script type="text/javascript" src="{% static 'js/JFCore.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/JFForms.js' %}"></script>
+    <!-- Set here the key for your domain in order to hide the watermark on the web server -->
+    <script type="text/javascript">
+        (function () {
+            JC.init({
+                domainKey: ''
+            });
+        })();
+    </script>
+
+    <!---->
+    <div class="package text-center">
+        <div class="container">
+            <h3>Book A Package</h3>
+            <p>Sed euismod sem id consequat rutrum. Ut convallis lorem a orci mollis, eu vulputate libero aliquet.
+                Praesent egestas nisi sed purus tincidunt faucibus. Aliquam lobortis orci lacus, sed faucibus augue
+                dapibus vitae. Ut vitae mi sapien. Phasellus a eros justo.
+                Curabitur odio massa, tincidunt nec nibh sit amet</p>
+            <!-- requried-jsfiles-for owl -->
+            <link href="{% static 'css/owl.carousel.css' %}" rel="stylesheet">
+            <script src="{% static 'js/owl.carousel.js' %}"></script>
+            <script>
+                $(document).ready(function () {
+                    $("#owl-demo").owlCarousel({
+                        items: 1,
+                        lazyLoad: true,
+                        autoPlay: true,
+                        navigation: true,
+                        navigationText: false,
+                        pagination: false,
+                    });
+                });
+            </script>
+            <!-- //requried-jsfiles-for owl -->
+            <div id="owl-demo" class="owl-carousel">
+                <div class="item text-center image-grid">
+                    <ul>
+                        <li><img src="{% static 'images/1.jpg' %}" alt=""></li>
+                        <li><img src="{% static 'images/2.jpg' %}" alt=""></li>
+                        <li><img src="{% static 'images/3.jpg' %}" alt=""></li>
+                    </ul>
+                </div>
+                <div class="item text-center image-grid">
+                    <ul>
+                        <li><img src="{% static 'images/3.jpg' %}" alt=""></li>
+                        <li><img src="{% static 'images/4.jpg' %}" alt=""></li>
+                        <li><img src="{% static 'images/5.jpg' %}" alt=""></li>
+                    </ul>
+                </div>
+                <div class="item text-center image-grid">
+                    <ul>
+                        <li><img src="{% static 'images/6.jpg' %}" alt=""></li>
+                        <li><img src="{% static 'images/2.jpg' %}" alt=""></li>
+                        <li><img src="{% static 'images/8.jpg' %}" alt=""></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!---->
+    <!---->
+    <div class="rooms text-center">
+        <div class="container">
+            <h3>Our Room Types</h3>
+            <div class="room-grids">
+                {% for room in rooms %}
+                <div class="col-md-4 room-sec">
+                    {% cloudinary room.1.image.public_id crop="fill" width="320" height="240" %}
+                    <h4>{{ room.0.name }}</h4>
+                    <p>{{ room.0.description }}</p>
+                    <div class="items">
+                        {% if room.0.has_air_conditioning %}
+                        <li><a href="#"><span class="img1"> </span></a></li>
+                        {% endif %}
+                        {% if room.0.has_dryer %}
+                        <li><a href="#"><span class="img2"> </span></a></li>
+                        {% endif %}
+                        {% if room.0.has_room_service %}
+                        <li><a href="#"><span class="img3"> </span></a></li>
+                        {% endif %}
+                        {% if room.0.has_electronic_safe %}
+                        <li><a href="#"><span class="img4"> </span></a></li>
+                        {% endif %}
+                        {% if room.0.has_wifi %}
+                        <li><a href="#"><span class="img5"> </span></a></li>
+                        {% endif %}
+                        {% if room.0.has_breakfast %}
+                        <li><a href="#"><span class="img6"> </span></a></li>
+                        {% endif %}
+                    </div>
+                </div>
+
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
